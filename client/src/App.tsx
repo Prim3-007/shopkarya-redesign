@@ -1,7 +1,8 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Router } from "wouter";
+import { useHashLocation } from "wouter/use-hash-location";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -9,16 +10,18 @@ import Diamonds from "./pages/Diamonds";
 import ProductDetail from "./pages/ProductDetail";
 
 
-function Router() {
+function AppRouter() {
   return (
-    <Switch>
-      <Route path={"\\"} component={Home} />
-      <Route path={"/diamonds"} component={Diamonds} />
-      <Route path={"/product/:id"} component={ProductDetail} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <Router hook={useHashLocation}>
+      <Switch>
+        <Route path={"\\"} component={Home} />
+        <Route path={"/diamonds"} component={Diamonds} />
+        <Route path={"/product/:id"} component={ProductDetail} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
   );
 }
 
@@ -32,11 +35,11 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
-        // switchable
+      // switchable
       >
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <AppRouter />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
